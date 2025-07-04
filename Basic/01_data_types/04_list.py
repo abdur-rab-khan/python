@@ -47,3 +47,26 @@ lst.reverse()  # [3, 2, 1]
 lst = [3, 1, 2]
 lst.sort()  # [1, 2, 3]
 lst.sort(reverse=True)  # [3, 2, 1]
+
+# slicing
+lst = [1, 2, 3, 4, 5]
+print(lst[1:3])  # [2, 3]
+print(lst[:2])   # [1, 2]
+print(lst[2:])   # [3, 4, 5]
+print(lst[-2:])  # [4, 5]
+
+# list comprehension
+squared = [x**2 for x in range(5)]  # [0, 1, 4, 9, 16]
+
+# enumerate
+lst = ['a', 'b', 'c']
+for index, value in enumerate(lst):
+    print(index, value)  # 0 a, 1 b, 2 c
+
+# range to list
+print(list(range(5)))  # [0, 1, 2, 3, 4]
+
+# nested lists
+nested = [[1, 2], [3, 4]]
+print(nested[0])  # [1, 2]
+print(nested[1][0])  # 3
