@@ -1,6 +1,7 @@
 s = {1, 2}
 s.add(3)  # s becomes {1, 2, 3}
 
+
 # clear()
 s = {1, 2, 3}
 s.clear()  # s becomes set()
