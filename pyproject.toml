@@ -1,5 +1,4 @@
-#: schema https://schemastore.org
-
+#: schema https://json.schemastore.org/pyproject.json
 [project]
 name = "python"
 version = "0.1.0"
@@ -9,11 +8,18 @@ authors = [
     { name = "Abdur Rab Khan", email = "abdurrabkhan3263@gmail.com" }
 ]
 requires-python = ">=3.14"
-package = false
 dependencies = [
     "ruff>=0.16.8",
 ]
 
+[tool.uv]
+package = false
+
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.414",
+]
