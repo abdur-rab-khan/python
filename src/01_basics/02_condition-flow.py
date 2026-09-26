@@ -11,6 +11,7 @@ else:
 
 
 # 👉 We can use "and", "or" and "not" at the place of "&&" "||" and "!"
+# 👉 While still in python you can use "&&", "||" but you can't use "!" you must have to use "not" instead
 is_true = True
 if is_true and a < b:
     print("Yes it's matched the condition")

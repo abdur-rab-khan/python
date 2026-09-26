@@ -1,7 +1,7 @@
 # 👉 Function without any args, using "def" keyboard, and optionally first line can be use for docs
 def greet() -> None:
     """Simple greet function"""
-    print("Hello Python")
+    print("Hello Python", end="\n\n")
 
 
 greet()
@@ -16,6 +16,7 @@ greet("Charlie", "Python")
 greet(
     fav_lang="C++", name="John"
 )  # You can pass like that as well, not here we don't need to worry about position of args
+print(end="\n\n")
 
 
 # 👉 Closure in Python Function
@@ -30,12 +31,13 @@ squareFn = power(2)
 print("Power of 2^2: ", squareFn(2))
 print("Power of 2^3: ", squareFn(3))
 print("Power of 2^4: ", squareFn(4))
+print(end="\n\n")
 
 """
 🟡 All the variables define in the function store in the "new Symbol table", created once function is call.
 🟡 Similar to JS, If you try to use a variable first it look at the:
     1. "Local Symbol Table" -> if not found then
-    2. "Local Symbole of enclosing fun" (If fn is closure) -> if not found then
+    2. "Local Symbols of enclosing fun" (If fn is closure) -> if not found then
     3. "Global Symbol Table" -> if not found then
     4. At the end "Table of built-in names"
 """
@@ -53,20 +55,26 @@ def noNameFn():
 
 noNameFn()
 print(name)
+print(end="\n\n")
 
 
 # 🟡 *args and **kwargs
-# 👉 args: Recieves Tuples of Values
-# 👉 **kwargs Recieves dict of values
+# 👉 args: Receives Tuples of Values
+# 👉 **kwargs Receives dict of values
 def noNameFn(name, *args, **kwargs):
     print(f"Name is: {name}")
     print(f"Arguments are: {args}")
-    print(f"Kwargs are: {kwargs}")
+    print(
+        f"Kwargs are: {kwargs}",
+    )
 
 
 # Similar to JS "...", "**" in Python use to unpack dict
-noNameFn("John", 2, 3, 4, "Python", "C++", **{"fav_lang": "Python", "age": 35})
+noNameFn(
+    "John", 2, 3, 4, "Python", "C++", **{"fav_lang": "Python", "age": 35}
+)  # You can do also like this, but below one is more better
 noNameFn("John", 2, 3, 4, "Python", "C++", fav_lang="C++", age=35)
+print(end="\n\n")
 
 list1 = [1, 2, 3]
 list2 = [11, 22, 33, *list1]

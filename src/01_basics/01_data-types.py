@@ -1,3 +1,22 @@
+"""
+🟡 Important Datatype in Python
+    1. Number
+    2. String
+    3. List
+    4. Dict
+    5. Tuple
+    6. Set
+
+🟡 Cools features of python
+    1. ** --> Use to directly find power of any number
+    2. Repetition (*) --> Can be use for multiplication or for repeating "string", "list" n times
+    3. Slicing [start:end] --> Simplest way to slice things like "string", "list" and also support -1 indexing.
+
+🟡 Different behaviour in Python
+    1.
+"""
+
+
 # 🟡 Declaring a variable in Python
 
 var1 = 50
@@ -8,9 +27,18 @@ while var2 := input("Enter: ") != "":
 # <-------------------------------------------> Data Types <------------------------------------------->
 from copy import deepcopy
 
-# 1. Number Data Type
+# ⭕ 1. Number Data Type, number in python is immutable, you can't change them
 x = 20
 y = 50
+
+a = 20
+b = a
+a = 50
+
+# 👉 It's because of, after redeclaring a with 50 for 50 python creates new memory block and b will still point to that memory block where "a = 20"
+# 👉 But it's not a case with mutable types, they just point by reference mean updating first will gonna effect on second.
+print(a)  # 50
+print(b)  # 20
 
 print("Multiplication of ", x, " and ", y, " is: ", x * y)
 
@@ -21,7 +49,7 @@ print("Square of 4 is: ", 4**2)
 # print(z)
 # z = 90
 
-# 👉 String repeatation, "50" will gona repeat two times, it's won't automatically convert into number like in js.
+# 👉 String representation, "50" will gonna repeat two times, it's won't automatically convert into number like in js.
 string_num = "50"
 print(string_num * 2)  # 5050
 print(
@@ -39,22 +67,22 @@ print("ASCII of a is: ", ord(character))
 
 # <------------------------------------------------------> END <------------------------------------------------------>
 
-# 2. String Data Type
+# ⭕ 2. String Data Type
 
-# 👉 It's possible to make string using both '' (single quote) and "" (duble quote)
+# 👉 It's possible to make string using both '' (single quote) and "" (double quote)
 singleStr = "Hello Python"
 doubleStr = "Hello String"
 
-print(singleStr + doubleStr)  # String concatination
+print(singleStr + doubleStr)  # String concatenation
 
-# "\" preceed to write escape like "\t (for tabs space)", "\n (for new line)", "("\"Python\", is good") -> Quote the string"
+# 👉 "\" precede to write escape like "\t (for tabs space)", "\n (for new line)", "("\"Python\", is good") -> Quote the string"
 str1 = 'C:\t Hello "Python", how are you!'
 print(str1)
 
 str2 = r"C:\home\name\t\x"  # Since "\" used to write escape but using "r" we can say python to ignore "escape" just thing as raw string
 print(str2)  # C:\home\name\t\x
 
-# * and + is used for repeating and concatinating the string
+# * and + is used for repeating and concatenating the string
 greet = "Hello "
 name = "Python"
 print(greet * 3 + name)
@@ -84,22 +112,34 @@ print("Size of name is: ", len(name))
 print("123".isalnum())
 print("abc".isalpha())
 
-
 # <------------------------------------------------------> END <------------------------------------------------------>
 
-# 3. List (Array) Data Type
+# ⭕ 3. List (Array) Data Type
 
 squares: list[int] = [2, 4, 8, 16, 32]
 cubes: list[int] = [1, 8, 27, 65, 25]
 
-# 🟡 Indexing, Slicing, Contatication (+), Repeatition (*) is also allowed with list as well
+list_a = [1, 2, 3, 4]
+list_b = list_a
+
+# 👉 Since, list and dict are mutable "list_b" is just point by reference to "list_a"
+print(list_a)  # [1, 2, 3, 4]
+list_a[0] = 10
+print(list_b)  # [10, 2, 3, 4]
+
+# 👉 Now, since we redeclare list_b will remain same just for list_a will point to brand new memory location
+list_a = [100, 200, 300, 400]
+print(list_a)
+print(list_b)
+
+# 🟡 Indexing, Slicing, Concatenation (+), Repetition (*) is also allowed with list as well
 print("Squares: ", squares)
 
 print(squares[0])  # 2
 print(squares[1:3])  # [4, 8]
 print(squares[1:])  # [4, 8, 16, 32]
 
-# 👉 Concatinating two lists
+# 👉 Concatenating two lists
 print(squares + cubes)  # [2, 4, 8, 16, 32, 1, 8, 27, 65, 25]
 
 # 👉 Make single list by repeating the squares list two times
@@ -113,10 +153,10 @@ squares.extend((11, 22, 33))
 squares.extend({1000, 2000, 3000})
 print(squares)
 
-squares.pop()  # Removes the index value, default is last index, ❌ Raise "IndexError" execption if not found
+squares.pop()  # Removes the index value, default is last index, ❌ Raise "IndexError" exception if not found
 squares.remove(
     3000
-)  # Removes the first occurence of a value, ❌ Raise "ValueError" exception if not found
+)  # Removes the first occurrence of a value, ❌ Raise "ValueError" exception if not found
 squares.sort(
     reverse=False  # Default is smaller to large, but using reverse "True" we can do large to smaller
 )  # Used to sort
@@ -126,12 +166,12 @@ print(squares_string)  # 2 - 4 - 8 - 11 - 16 - 22 - 32 - 33 - 64 - 1000
 
 # 👉 Shallow copy and Deep Copy
 sqr_copy = squares.copy()  # It's a shallow copy
-sqr_deepcopy = deepcopy(squares)  # It's a deepcopy
+sqr_deepcopy = deepcopy(squares)  # It's a deep-copy
 
 # 🟡 List Comprehensions, use to create new list where each element is the result of some operations of another list of iterable (list, set, tuple and dict)
 sqr = [
     num**2 for num in range(2, 11)
-]  # Range function used to generate sequence of interger, range(start, end, step)
+]  # Range function used to generate sequence of integer, range(start, end, step)
 print("Square: ", sqr)
 
 # 👉 It's similar to nested loop for each
@@ -159,7 +199,7 @@ for i, value in enumerate(["Hello", "World", "Python"]):
 
 # <------------------------------------------------------> END <------------------------------------------------------>
 
-# 4. Dict is a hashmap data structure in python
+# ⭕ 4. Dict is a hashmap data structure in python
 
 # 👉 It's a key value pair data structure, key can be any immutable data type like (number, string and tuple)
 my_dict = {
@@ -183,16 +223,16 @@ my_dict.update({"name": "Python3"})
 
 # <------------------------------------------------------> END <------------------------------------------------------>
 
-# 5. Set in python is unordered collection of elements with no duplicates and math operations like "union", "intersection", "difference" etc
+# ⭕ 5. Set in python is unordered collection of elements with no duplicates and math operations like "union", "intersection", "difference" etc
 bucket = {"apple", "orange", "pears"}
 
 print("Is apple is there: ", "apple" in bucket)  # o(1) for access
 
 # <------------------------------------------------------> END <------------------------------------------------------>
 
-# 6. Tuple Data Type, it's non-mutable data structure, that's why it's good for using tuple as a key in dict
+# ⭕ 6. Tuple Data Type, it's non-mutable data structure, that's why it's good for using tuple as a key in dict
 
-tup1 = "a", "b", "c", "d"  # First way using "," seperated to create tuple
+tup1 = "a", "b", "c", "d"  # First way using "," separated to create tuple
 print(tup1)
 
 tup2 = ("a", "b", "c", "d")  # Using parentheses

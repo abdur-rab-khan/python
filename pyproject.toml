@@ -1,25 +1,29 @@
-#: schema https://json.schemastore.org/pyproject.json
+# : schema https://json.schemastore.org/pyproject.json
 [project]
 name = "python"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "Abdur Rab Khan", email = "abdurrabkhan3263@gmail.com" }
-]
 requires-python = ">=3.14"
+authors = [{ name = "Abdur Rab Khan", email = "abdurrabkhan3263@gmail.com" }]
 dependencies = [
-    "ruff>=0.16.8",
+  "ruff>=0.16.8",
 ]
 
-[tool.uv]
-package = false
+[dependency-groups]
+dev = [
+  "pyright>=1.1.414",
+  "ty>=0.0.84",
+]
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
 build-backend = "uv_build"
 
-[dependency-groups]
-dev = [
-    "pyright>=1.1.414",
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = [
+    "src/01_basics/xxx",
 ]
