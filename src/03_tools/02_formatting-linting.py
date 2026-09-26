@@ -1,1 +1,1 @@
-var1 = 'Hello world'
+var1 = "Hello world"
