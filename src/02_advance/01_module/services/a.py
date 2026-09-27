@@ -1,0 +1,5 @@
+current_path = "services/a.py"
+
+
+def greetFn():
+    print(f"Hello Python! I'm from ${current_path}")

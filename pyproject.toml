@@ -1,0 +1,25 @@
+# : schema https://json.schemastore.org/pyproject.json
+[project]
+name = "python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+authors = [{ name = "Abdur Rab Khan", email = "abdurrabkhan3263@gmail.com" }]
+dependencies = []
+
+# [project.scripts]
+# start = "python.main:main"
+
+[dependency-groups]
+dev = [
+  "pyright>=1.1.414",
+  "ty>=0.0.84",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+package = false
