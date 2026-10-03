@@ -13,18 +13,28 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import override
+from typing import Self, override
 
 
 class Player:
     # 👉 There are only one skills list stored on the classes, every object just point to this one.
     # 👉 It's good choice to keep everything in current instance level, like we did with "self.instance_skills"
     skills = ["kick", "jump-attack"]
+    _instance = None
 
-    # 👉 "__init__" function call once object is created
+    # 👉 "__new__" is a static method that has access to the class ("cls"), not an instance, and it runs before "__init__". It is the method that creates the object, so we can implement singleton, factory, etc.
+    # def __new__(cls):
+    #     return super().__new__(cls)
+
+    def __new__(cls) -> Self:
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance  # type: ignore[return-value]
+
+    # 👉 "__init__" runs after the object is created and gets that object as an argument ("self"), and we use that function to initialize instance variables. It runs every time we call the class, even in a singleton.
     def __init__(self):
-        # It directly goes into instance "namespace", so everything we object is create a namespace (dict) attached with it,
-        # Anything we put using "self." directly goes into that namespace (dict)
+        # It directly goes into the instance "namespace" (dict), so every time an object is created, a namespace (dict) is attached to it.
+        # Anything we put using "self." directly goes into that namespace (dict).
         self.instance_skills = ["fire", "roll up"]
 
 
@@ -107,7 +117,7 @@ class Employee:
 print(Employee(name="Python", dept="IT", salary=0))
 
 
-# 2. @staticmethod --> Similar to static in C++, it does not receives "self (current object namespace)" and "cls (class namespace)"
+# 2. @staticmethod --> Similar to static in C++, it does not receives "self (current object namespace)", simple static methods we access through Class directory
 class Math:
     @staticmethod
     def add(a, b):

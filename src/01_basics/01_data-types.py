@@ -87,7 +87,6 @@ greet = "Hello "
 name = "Python"
 print(greet * 3 + name)
 
-
 # 👉 Indexing, used to obtain particular element using the index number.
 print(name[0])  # P
 
@@ -175,9 +174,16 @@ sqr = [
 print("Square: ", sqr)
 
 # 👉 It's similar to nested loop for each
-# Goes from LEFT TO RIGHT
-# Where for each element of num1 first it checks x != 3, it not than run num3
-# Then again check x != y if true than only (x, y) will run
+# 🟡 Think of it like "(x, y)" will run at the end once very condition is satisfied, look at below how it run.
+# 🟡 for x in num1 --> run after condition (x != 3) if true then --> for y in num2 --> run after condition (x != y) if this true then "(x, y)" will run.
+#
+# llll = []
+# for x in num1:
+#     if x != 3:
+#         for y in num2:
+#             if x != y:
+#                 llll.append((x, y))
+#
 num1 = [1, 2, 3]
 num2 = [2, 1, 4]
 nested_list = [

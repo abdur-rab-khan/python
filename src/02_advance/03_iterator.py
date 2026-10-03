@@ -1,47 +1,37 @@
-# def read_file(filename):
-#     with open(filename, "r") as file:
-#         lines = file.readlines()  # Reads the entire file into memory
-#     return lines
-#
-# # Process the file
-# lines = read_file("example.txt")
-# error_count = 0
-# for line in lines:
-#     if "error" in line:
-#         error_count += 1
-#
-# print("Total errors:", error_count)
+class LinkedList:
+    def __init__(self, val=0, next: LinkedList | None = None) -> None:
+        self.val = val
+        self.next = next
 
-#
-# def simple_generator():
-#     yield "apple"
-#     yield "banana"
-#     yield "cherry"
-#
-# gen = simple_generator()
-#
-# # First way to get the generator values
-# print(gen.__next__())
-# print(gen.__next__())
-# print(gen.__next__())
-#
-# # Second way to get the generator values
-#
-# for val in simple_generator():
-#     print(val)
+    def __iter__(self):
+        # node = self
+        # while node is not None:
+        #     yield node.val
+        #     node = node.next
+        return LinkedListIterator(self)
 
 
-# def read_file_lazily(filename):
-#     with open(filename, "r") as file:
-#         for line in file:  # Reads one line at a time
-#             yield line  # Yields the line to the caller
-#
-# # Process the file
-# error_count = 0
-# for line in read_file_lazily("example.txt"):
-#     if "error" in line:
-#         error_count += 1
+class LinkedListIterator:
+    def __init__(self, node: LinkedList | None = None) -> None:
+        self.node = node
+
+    # 🟡 It's a function that returns current object, To call "__next__" once by one to get items one by one.
+    def __iter__(self):
+        return self
+
+    # 🟡 __next__ is a function that calls again and again for getting items on by one and "StopIteration" to stop
+    def __next__(self):
+        if self.node == None:
+            raise StopIteration
+        value = self.node.val
+        self.node = self.node.next
+        return value
 
 
-def greet():
-    print("Hello")
+l_list = LinkedList(1, LinkedList(2, LinkedList(3, LinkedList(4, LinkedList(5)))))
+print(
+    f"Sum of all numbers in linkedlist is {sum(l_list)}"
+)  # working because sum function needs a data-structure that have "iterator" under the hood.
+
+for v in l_list:
+    print(v)
