@@ -10,6 +10,21 @@ class LinkedList:
         #     node = node.next
         return LinkedListIterator(self)
 
+    # What do display when user uses print function
+    def __str__(self) -> str:
+        display_result: str = ""
+        display_result += "["
+
+        current_node = self
+        while current_node:
+            display_result += str(current_node.val)
+            if current_node.next:
+                display_result += ", "
+            current_node = current_node.next
+
+        display_result += "]"
+        return display_result
+
 
 class LinkedListIterator:
     def __init__(self, node: LinkedList | None = None) -> None:
@@ -32,6 +47,7 @@ l_list = LinkedList(1, LinkedList(2, LinkedList(3, LinkedList(4, LinkedList(5)))
 print(
     f"Sum of all numbers in linkedlist is {sum(l_list)}"
 )  # working because sum function needs a data-structure that have "iterator" under the hood.
+print(l_list)
 
 for v in l_list:
     print(v)
