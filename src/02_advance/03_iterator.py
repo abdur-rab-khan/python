@@ -10,7 +10,7 @@ class LinkedList:
         #     node = node.next
         return LinkedListIterator(self)
 
-    # What do display when user uses print function
+    # What to display when user uses print function
     def __str__(self) -> str:
         display_result: str = ""
         display_result += "["

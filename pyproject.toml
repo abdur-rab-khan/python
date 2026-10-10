@@ -7,7 +7,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 authors = [{ name = "Abdur Rab Khan", email = "abdurrabkhan3263@gmail.com" }]
 dependencies = [
-    "httpx>=0.28.1",
+    "httpx[cli]>=0.28.1",
 ]
 
 # [project.scripts]
