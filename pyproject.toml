@@ -7,15 +7,22 @@ readme = "README.md"
 requires-python = ">=3.14"
 authors = [{ name = "Abdur Rab Khan", email = "abdurrabkhan3263@gmail.com" }]
 dependencies = [
-    "httpx[cli]>=0.28.1",
+  "httpx[cli]>=0.28.1",
+  "pydantic>=2.14.0",
 ]
 
-# [project.scripts]
-# start = "python.main:main"
+[project.scripts]
+# lint = "ruff check" ❌ Here we can't run library/package run just script
+# Let's break down this:
+#   1. "python.main" -> "python/main.py"
+#   2. ":main"       -> "it's the function name inside main.py file"
+# * Similar to "python -m python.main"
+start = "python.main:main"
 
 [dependency-groups]
 dev = [
   "pyright>=1.1.414",
+  "ruff>=0.17.0",
   "ty>=0.0.84",
 ]
 
