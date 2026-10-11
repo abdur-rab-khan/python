@@ -101,19 +101,132 @@
     7. Type checkers check code before it runs. Pydantic checks real data while it runs. Use both.
 """
 
-from pydantic import BaseModel, Field, PositiveInt, ValidationError
+from typing import Annotated, Literal
+
+from bcrypt import gensalt, hashpw
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    PositiveInt,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
+from pydantic_settings import BaseSettings
 
 
-class User(BaseModel):
-    id: int
-    age: PositiveInt
-    first_name: str = Field(gt=1, lt=2)  # Use to add rules on each field
-    last_name: str = Field(gt=1, lt=2)
+# 🟡 BaseSettings, extract the environment variables from ".env" file with and put the validation as well
+class Settings(BaseSettings):
+    debug: bool
+    secret_key: str
+    database_url: str
+
+    model_config = {"env_file": ".env.example"}
 
 
 try:
-    user_1 = User(id=1, age=-20, first_name="Abdur Rab", last_name="Khan")
-    print(user_1.model_dump())  # Converts into python dict
-    print(user_1.model_dump_json())  # Converts into python json
+    env = Settings()
+    print(f"Environment Variables are: {env.model_dump()}")
+except ValidationError as err:
+    print(f"Failed to get required settings: {err.errors()}")
+
+# def check_and_hash(v: str) -> str:
+#     if len(v) < 8:
+#         raise ValueError("Password must be at least 8 characters long")
+#     return hashpw(v.encode(), gensalt()).decode()
+
+
+# HashedPassword = Annotated[str, AfterValidator(check_and_hash)]
+
+
+# 🟡 Providing data to user class does two things:
+#       1. parsing
+#       2. validating
+class User(BaseModel):
+    id: int
+    age: PositiveInt
+    username: str
+    password: str
+    confirm_password: Annotated[str, Field(exclude=True)]
+
+    # 👉 Field function is used to attach constraints on the field, like "first_name" must be greater than 1 and less than 255
+    first_name: str = Field(
+        min_length=1, max_length=255, description="Name of the User"
+    )  # Use to add rules on each field
+    last_name: str = Field(min_length=1, max_length=255)
+
+    # 👉 Annotated is another way to make type in pydentic
+    address: Annotated[str, Field(min_length=10, max_length=255)]
+
+    # 👉 Field with default value
+    # version: float = 3.15
+    version: Annotated[float, Field(default=3.15)]
+
+    # 👉 Literal allow to add literal value
+    role: Literal["admin", "user"] = Field(
+        default="admin",
+        validate_default=True,
+        description="Metadata about the field mostly google in AI to provide metadata",
+    )
+
+    # 👉 Pydantic also allow to add custom "field_validator" as well as "model_validator"
+    #   1. "field_validator" adds validation on a particular field with custom validation
+    #   2. "model_validator" allows to add validation on many fields together
+    @field_validator("username")
+    @classmethod
+    def no_spaces(cls, v):
+        if " " in v:
+            raise ValueError("Username cannot have spaces")
+        return v.lower()
+
+    # 👉 "model_validator" allows to add validation on many fields together and also we can provide model that tell pydantics to run custom validator either after or before pydantic has checked it's must because sometime we add typecasting.
+    @model_validator(mode="after")
+    def check_password(self):
+        if self.password != self.confirm_password:
+            raise ValueError("Password do not match")
+        self.password = hashpw(self.password.encode(), gensalt()).decode()
+        return self
+
+    # It allows to modify the configuration like by default "pydentic" does not allow extra fields
+    model_config = ConfigDict(extra="allow")
+
+
+try:
+    user_1 = User(
+        id=1,
+        age=20,
+        version=3.15,
+        role="admin",
+        # password="python111",
+        password="python123",
+        confirm_password="python123",
+        username="Python",
+        first_name="Python",
+        last_name="Google",
+        address="United State",
+    )
+
+    # 👉 Converting the provided data into "python dict", "json"
+    print(user_1.model_dump())
+    print(user_1.model_dump_json())
+
+    # 👉 Just validating the data, from "dict", "json" and returns the User class
+    dict_user = User.model_validate(
+        {
+            "id": 1,
+            "age": 21,
+            "username": "Python",
+            "role": "admin",
+            "password": "python123",
+            "confirm_password": "python123",
+            "first_name": "Python",
+            "last_name": "Google",
+            "address": "United State",
+        }
+    )
+    json_user = User.model_validate_json(
+        '{"id": 1, "age": 21, "username": "Python", "role": "admin", "password": "python123", "confirm_password": "python123", "first_name": "Python", "last_name": "Google", "address": "United State"}'
+    )
 except ValidationError as err:
     print(f"Validation error happened: {err.errors()}")
