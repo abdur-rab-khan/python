@@ -1,0 +1,11 @@
+[
+  {
+    "label": "FastAPI: Dev Mode",
+    "adapter": "Debugpy",
+    "request": "launch",
+    "module": "fastapi",
+    "args": ["dev"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "justMyCode": true
+  }
+]

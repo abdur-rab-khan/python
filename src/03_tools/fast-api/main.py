@@ -1,7 +1,24 @@
-from typing import Annotated, Any, Literal
+from typing import Annotated, Literal
 
-from fastapi import Cookie, FastAPI, HTTPException, Path, Query
-from pydantic import BaseModel, Field
+from fastapi import Cookie, FastAPI, HTTPException, Path, Query, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field, computed_field
+
+
+# 👉 Model for making response in a structured manner using ""pydantic"" and generic in python
+class APIResponse[T = None](BaseModel):
+    status_code: Annotated[int, Field(default=200, ge=200, le=599)]
+    message: Annotated[str, Field(min_length=10, max_length=255)]
+    data: T | None = None
+
+    @computed_field
+    def success(self) -> bool:
+        return 200 <= self.status_code < 300
+
+    @computed_field
+    def status(self) -> Literal["success", "failed"]:
+        return "success" if 200 <= self.status_code < 300 else "failed"
 
 
 class Item(BaseModel):
@@ -21,6 +38,39 @@ class FilterParams(BaseModel):
 app = FastAPI()
 
 
+# <------------------------------------------> ERROR HANDLING <------------------------------------------>
+# 👉 In FastAPI to throw an error we simple raise an exception via "HTTPException", FastAPI automatically handles that but to make sure everything is structured.
+# 👉 We use ""exception_handler"" where we can override the default exception handlers, by providing the exception that we want to override like the ""exception_handler"" decorator
+@app.exception_handler(RequestValidationError)
+async def handle_request_validation_error(_, exc: RequestValidationError):
+
+    error_details = []
+    for error in exc.errors():
+        # e.g, "body -> age: input should be valid number"
+        location = " -> ".join(loc for loc in error["loc"])
+        error_details.append(f"{location}: {error['msg']}")
+
+    error_message = "Validation Failed: " + "; ".join(error_details)
+
+    # Force to strict to match APIResponse schema validation
+    response_body = APIResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, message=error_message
+    )
+
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        content=response_body.model_dump(exclude={"data"}),
+    )
+
+
+@app.exception_handler(HTTPException)
+async def handle_http_exception(_, exc: HTTPException):
+    response_body = APIResponse(status_code=exc.status_code, message=str(exc.detail))
+    return JSONResponse(
+        status_code=exc.status_code, content=response_body.model_dump(exclude={"data"})
+    )
+
+
 @app.get("/")
 async def root():
     return {"hello": "Python"}
@@ -34,8 +84,12 @@ async def get_items(
     item_id: Annotated[
         int, Path(title="Id of the item that you want to get", gt=1, le=1000)
     ],
-):
-    return {"item_id": item_id}
+) -> APIResponse[dict]:
+    return APIResponse[dict](
+        status_code=200,
+        data={"item_id": item_id},
+        message=f"here's the item with this {item_id}",
+    )
 
 
 # <------------------------------------------> QUERY PARAMS <------------------------------------------>
@@ -66,7 +120,7 @@ async def create_item(item: Item):
 
 
 # <------------------------------------------> COOKIES <------------------------------------------>
-# 👉 In FastAPI we can get ""cookies"" and ""headers"" same way like we define ""Body()"", ""Query()"" to infer to the ""query and body"".
+# 👉 In FastAPI we can get ""cookies"" and ""headers"" same way like we define ""Body()"", ""Query()"", where we directly infer to inject stuff that we want using ""Annotated""
 # 👉 We can also make ""pydantic"" model to group and declare validation on cookies
 @app.get("/cookies")
 async def get_cookies(cookie: Annotated[str, Cookie()]):
