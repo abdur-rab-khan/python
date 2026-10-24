@@ -13,7 +13,7 @@
     3. Slicing [start:end] --> Simplest way to slice things like "string", "list" and also support -1 indexing.
 
 🟡 Different behaviour in Python
-    1.
+    1. "==" and "is" -> these two operator use for equality check, "==" checks the content but "is" checks where both are pointing to same memory location.
 """
 
 
