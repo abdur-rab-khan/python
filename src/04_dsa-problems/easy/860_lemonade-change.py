@@ -1,15 +1,3 @@
-def generate_filename(question_title: str, file_ext=".cpp"):
-    number_part, _, title_part = question_title.lower().partition(" ")
-
-    question_number = number_part.rstrip(".")
-    title_words = title_part.split()
-
-    if not question_number.isdigit() or not title_words:
-        raise ValueError(f"Expected '<number>. <title>, get: {question_title!r}")
-
-    return question_number + "_" + "-".join(title_words) + file_ext
-
-
 def main(bills: list[int]):
     fiveBills = tenBills = 0
 
