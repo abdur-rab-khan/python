@@ -37,6 +37,11 @@ class FilterParams(BaseModel):
 
 app = FastAPI()
 
+# 🟡 Let's include necessary routes
+from .others.routers import user
+
+app.include_router(user.router)
+
 
 # <------------------------------------------> ERROR HANDLING <------------------------------------------>
 # 👉 In FastAPI to throw an error we simple raise an exception via "HTTPException", FastAPI automatically handles that but to make sure everything is structured.
@@ -76,7 +81,7 @@ async def root():
     return {"hello": "Python"}
 
 
-# <------------------------------------------> PATH PARAMS <------------------------------------------>
+# <------------------------------------------> 1. PATH PARAMS <------------------------------------------>
 # 👉 FastAPI can automatically infer the ""path params"" by just using the ""params name"" (e.g "item_id"), and automatically validate/parse based on type and send error to the client, under the hood it uses ""pydantic"" for this.
 # 👉 In FastAPI we can directly apply validation logic to each ""path params"" using ""Path"" function via ""Annotated"" and also using ""Query"" for query.
 @app.get("/items/{item_id}")
@@ -92,7 +97,7 @@ async def get_items(
     )
 
 
-# <------------------------------------------> QUERY PARAMS <------------------------------------------>
+# <------------------------------------------> 2. QUERY PARAMS <------------------------------------------>
 # 👉 FastAPI automatically infer parameters other than """PATH PARAMS""" as query and same as ""PATH PARAMS"" here as well validate/parse happens and send error to the client.
 # 👉 We can also perform validation on the ""query params"" that we are getting by adding into the ""Annotated[type, Query(default="", max_length=2, ...etc)]""
 # 👉 If we have related ""Query Params"", we can make a ""Pydantic"" model and group all the related ""Queries"" and define using ""Query()""
@@ -110,7 +115,7 @@ async def put_items(
     }
 
 
-# <------------------------------------------> REQUEST BODY <------------------------------------------>
+# <------------------------------------------> 3. REQUEST BODY <------------------------------------------>
 # 👉 FastAPI automatically infer as ""Request Body"" if the type is ""dict, list and pydantic"" or if you want to make ""string, number etc"" body you have to provide annotation with body like this """body: Annotated[type, Body()]"""
 # 👉 Since it's using pydantic, FastAPI will automatically sanitize/validate/parse the incoming data based on the ""Pydantic Schema""
 # 👉 We provide multiple ""body"" and FastAPI will automatically infer them as a group "body" dict, like we can have "item: Item, user: User" and then fastapi we expect to give data like this "{'item': item, 'user': user}"
@@ -119,9 +124,21 @@ async def create_item(item: Item):
     return item.model_dump(exclude={"price"})
 
 
-# <------------------------------------------> COOKIES <------------------------------------------>
+# <------------------------------------------> 4. COOKIES <------------------------------------------>
 # 👉 In FastAPI we can get ""cookies"" and ""headers"" same way like we define ""Body()"", ""Query()"", where we directly infer to inject stuff that we want using ""Annotated""
 # 👉 We can also make ""pydantic"" model to group and declare validation on cookies
 @app.get("/cookies")
 async def get_cookies(cookie: Annotated[str, Cookie()]):
     return {"cookie": cookie}
+
+
+# <------------------------------------------> 5. RESPONSE MODEL <------------------------------------------>
+from .others.models.user import BaseUser, UserCreate
+
+
+@app.post("/users", response_model=APIResponse[BaseUser], status_code=201)
+def create_user(user: UserCreate):
+    new_user = BaseUser(id=user.id, name=user.name, email=user.email)
+    return APIResponse[BaseUser](
+        status_code=201, message="User is created successfully", data=new_user
+    )
