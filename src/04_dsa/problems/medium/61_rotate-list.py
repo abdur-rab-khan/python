@@ -19,31 +19,32 @@ class ListNode:
 
 class Solution:
     def rotate_right(self, head: ListNode | None, k: int) -> ListNode | None:
-        if head == None or head.next == None or k <= 0:
+        if head is None or head.next == None or k <= 0:
             return head
 
-        # Finding the size of the linkedlist
-        tail = head
+        # Getting the list of the linked list
         list_size = 1
-        while tail.next != None:
-            tail = tail.next
+        old_tail = head
+        while old_tail.next:
             list_size += 1
+            old_tail = old_tail.next
 
-        # Rounded off if k become greater than the list_size
-        rounded_k = k % list_size
-        if rounded_k <= 0:
+        # Wrapping the k around the list_size
+        wrapped_k = k % list_size
+
+        # Don't need to rotate because it's already correct
+        if wrapped_k == 0:
             return head
 
         new_tail = head
-        for _ in range((list_size - rounded_k) - 1):
+        for _ in range((list_size - wrapped_k) - 1):
+            if new_tail.next is None:
+                break
             new_tail = new_tail.next
-
-        if not new_tail or new_tail.next == None:
-            return None
 
         new_head = new_tail.next
         new_tail.next = None
-        tail.next = head
+        old_tail.next = head
 
         return new_head
 

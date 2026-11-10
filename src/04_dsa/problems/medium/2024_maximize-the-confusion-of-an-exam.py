@@ -1,22 +1,34 @@
-def max_consecutive_answer(answer_key: str, k: int):
-    key_count = [0] * 2
-    max_consecutive: int = 0
+class Solution:
+    def max_consecutive_answers(self, answer_key: str, k: int) -> int:
+        max_consecutive = 0
 
-    left_idx = 0
-    for right_idx, ans in enumerate(answer_key):
-        key_count[0 if ans == "T" else 1] += 1
-        max_freq = max(key_count[0], key_count[1])
+        true_count = 0
+        false_count = 0
+        max_answer_count = 0
 
-        while (right_idx - left_idx + 1) - max_freq > k:
-            key_count[0 if answer_key[left_idx] == "T" else 1] -= 1
-            left_idx += 1
+        left_idx = 0
+        for right_idx, key in enumerate(answer_key):
+            if key == "T":
+                true_count += 1
+            else:
+                false_count += 1
+            max_answer_count = max(true_count, false_count)
 
-        max_consecutive = max(max_consecutive, (right_idx - left_idx) + 1)
+            while (right_idx - left_idx + 1) - max_answer_count > k:
+                if answer_key[left_idx] == "T":
+                    true_count -= 1
+                else:
+                    false_count -= 1
+                left_idx += 1
 
-    return max_consecutive
+            max_consecutive = max(max_consecutive, right_idx - left_idx + 1)
+
+        return max_consecutive
 
 
 if __name__ == "__main__":
-    print(max_consecutive_answer("TFFT", 1))
-    print(max_consecutive_answer("TTFF", 2))
-    print(max_consecutive_answer("TTFTTFTT", 1))
+    sol: Solution = Solution()
+
+    print(sol.max_consecutive_answers("TFFT", 1))
+    print(sol.max_consecutive_answers("TTFF", 2))
+    print(sol.max_consecutive_answers("TTFTTFTT", 1))
