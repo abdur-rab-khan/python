@@ -1,5 +1,6 @@
 class Solution:
     def sorted_squares(self, nums: list[int]) -> list[int]:
+        write_idx = 0
         num_squares: list[int] = [0] * len(nums)
 
         left_idx = 0
@@ -9,9 +10,13 @@ class Solution:
             right_square = nums[right_idx] * nums[right_idx]
 
             if left_square < right_square:
-                num_squares[right_idx] = right_square
+                num_squares[write_idx] = right_square
+                right_idx -= 1
             else:
-                num_squares[left_idx] = left_square
+                num_squares[write_idx] = left_square
+                left_idx += 1
+
+            write_idx += 1
 
         return num_squares
 
