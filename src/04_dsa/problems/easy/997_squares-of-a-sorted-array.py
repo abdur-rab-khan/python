@@ -1,6 +1,6 @@
 class Solution:
     def sorted_squares(self, nums: list[int]) -> list[int]:
-        write_idx = 0
+        write_idx = len(nums) - 1
         num_squares: list[int] = [0] * len(nums)
 
         left_idx = 0
@@ -16,7 +16,7 @@ class Solution:
                 num_squares[write_idx] = left_square
                 left_idx += 1
 
-            write_idx += 1
+            write_idx -= 1
 
         return num_squares
 
