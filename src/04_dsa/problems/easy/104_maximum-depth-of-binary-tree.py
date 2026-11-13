@@ -7,6 +7,7 @@ class TreeNode:
         self.right = right
 
 
+# DFS version for solving max_depth problem
 class Solution:
     def max_depth(self, root: TreeNode | None) -> int:
         if root is None:
@@ -16,6 +17,9 @@ class Solution:
         right_depth = self.max_depth(root.right)
 
         return 1 + max(left_depth, right_depth)
+
+
+# BFS version for solving max_depth problem
 
 
 if __name__ == "__main__":
