@@ -1,43 +1,40 @@
 class Solution:
     def solve_queens(self, n: int) -> list[list[str]]:
-        is_placed: list[int] = []
-        current: list[str] = ["."] * n
-        answer: list[list[str]] = [["."] * n for _ in range(n)]
+        placed_queens: list[int] = []
+        all_possibilities: list[list[str]] = []
 
-        def is_safe(row, col):
+        # method that gonna check whether the current cell is safe or not
+        def is_safe(row: int, col: int) -> bool:
             for r in range(row):
-                # checking whether queen is exists in the col
-                if is_placed[r] == col:
+                if placed_queens[r] == col:
                     return False
 
-                # checking whether queen is exists in the diagonal
-                if abs(row - r) == abs(is_placed[r] - col):
+                if abs(row - 1) == abs(placed_queens[r] - col):
                     return False
 
             return True
 
-        def solve(row: int, col: int):
+        def backtracking(row: int, current: list[list[str]]):
             if row == n:
-                answer.append(current.copy())
+                all_possibilities.append(["".join(a) for a in current])
                 return
 
-            if col > n:
-                return solve(row + 1, 0)
-
-            for c in range(col, n):
-                if not is_safe(row, c):
+            for col in range(n):
+                if not is_safe(row, col):
                     continue
 
-                is_placed.append(c)
-                current[row][c] = "Q"
+                current[row][col] = "Q"
+                placed_queens.append(col)
 
-                solve(row, col + 1)
+                backtracking(row + 1, current)
 
-                is_placed.pop()
-                current[row][c] = "."
+                placed_queens.pop()
+                current[row][col] = "."
 
-        solve(0, 0)
-        return answer
+        # calling the backtracking method to general all the possibilities
+        backtracking(0, [["."] * n for _ in range(n)])
+
+        return all_possibilities
 
 
 if __name__ == "__main__":
