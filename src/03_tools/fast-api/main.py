@@ -1,7 +1,9 @@
 from typing import Annotated, Literal
+from uuid import uuid4
 
-from fastapi import Cookie, FastAPI, HTTPException, Path, Query, status
+from fastapi import Cookie, FastAPI, HTTPException, Path, Query, Request, status
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, computed_field
 
@@ -35,7 +37,37 @@ class FilterParams(BaseModel):
     tags: list[str] = []
 
 
+# 🟡 "LIFESPAN": In the first API, we can provide a lifespan function that will run once the
+#                application starts, and it will also run a piece of code once the application closes.
+#                It is really important for calling a database, where we need to start the database once
+#                the application runs, and we will use `yield`. The piece of code after the `yield` will
+#                run once the application stops.
 app = FastAPI()
+
+
+# 🟡 Let's add "CORS MIDDLEWARE" using "CORSMiddleware"
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# 🟡 Let's add custom middleware add something inside the header and the route can access it
+@app.middleware("http")
+async def request_id_middleware(request: Request, call_next):
+    request_id = uuid4().hex
+    request.state.request_id = request_id
+
+    # Calling the route
+    response = await call_next(request)
+
+    # Route will return a response and in that response we can attach Request-ID directly
+    response.headers["X-Request-ID"] = request_id
+    return response
+
 
 # 🟡 Let's include necessary routes
 from .others.routers import user
@@ -77,8 +109,9 @@ async def handle_http_exception(_, exc: HTTPException):
 
 
 @app.get("/")
-async def root():
-    return {"hello": "Python"}
+async def root(request: Request):
+    # 🟡 Directly accessing from the request which is attached by the middleware
+    return {"hello": "Python", "request_id": request.state.request_id}
 
 
 # <------------------------------------------> 1. PATH PARAMS <------------------------------------------>
@@ -142,3 +175,21 @@ def create_user(user: UserCreate):
     return APIResponse[BaseUser](
         status_code=201, message="User is created successfully", data=new_user
     )
+
+
+# <------------------------------------------> 6. FOLDER STRUCTURE <------------------------------------------>
+"""
+app/
+├── main.py
+├── routers/
+│   ├── __init__.py
+│   ├── users.py
+│   └── posts.py
+├── schemas/        # Pydantic models (UserCreate, UserOut)
+│   └── user.py
+├── models/         # Database tables
+│   └── user.py
+├── services/       # Business logic
+│   └── user_service.py
+└── dependencies.py # Depends functions (get_db, get_current_user)
+"""

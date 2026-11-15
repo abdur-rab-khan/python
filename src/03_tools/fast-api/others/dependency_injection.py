@@ -1,10 +1,12 @@
 """
 🟡 Dependency injection is a way to inject something, like methods or classes, inside another function.
-🟡 There might be a route that needs something again and again. Instead of creating the same thing again, we just create it once
-   and inject it as a dependency using a dependent function.
+🟡 Suppose we do a service to a route. Instead of creating the same logic again for each route, we
+   create it once and provide it as a dependency.
+🟡 Unlike NestJS's singleton pattern, here in FastAPI, for each request, the dependency instance will
+   be created. To prevent this, we need to use LRU cache, and from that method, we need to return that class.
 """
 
-from fastapi import Depends, Header, HTTPException, Query
+from fastapi import Depends, HTTPException, Query
 
 
 # 🟡 Now we can pass the pagination function using dependency injection.
