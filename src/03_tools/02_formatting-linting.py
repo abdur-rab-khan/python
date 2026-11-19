@@ -1,4 +1,3 @@
-# RUFF -- Linter and Formatter
 """
 🟡 1. Installing Ruff
 
@@ -98,14 +97,4 @@
         1. mypy .                                   [Popular and old type checker]
         2. pyright                                  [Fast type checker, used in many editors]
         3. uvx ty check                             [New type checker from the Ruff team]
-
-🟡 8. Important Concepts
-
-    1. Linting finds problems. Formatting only changes how code looks.
-    2. Run "ruff check --fix" first, then "ruff format".
-    3. Keep all settings in pyproject.toml, so the whole team uses the same rules.
-    4. Start with a small list of rules, then add more later.
-    5. Ruff is very fast, so you can run it on every save.
-    6. In an old project, do not format everything at once. Do it in one separate commit.
-    7. Ruff does not check types. Use mypy, pyright or ty with it.
 """
