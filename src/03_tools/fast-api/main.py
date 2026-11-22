@@ -175,21 +175,3 @@ def create_user(user: UserCreate):
     return APIResponse[BaseUser](
         status_code=201, message="User is created successfully", data=new_user
     )
-
-
-# <------------------------------------------> 6. FOLDER STRUCTURE <------------------------------------------>
-"""
-app/
-├── main.py
-├── routers/
-│   ├── __init__.py
-│   ├── users.py
-│   └── posts.py
-├── schemas/        # Pydantic models (UserCreate, UserOut)
-│   └── user.py
-├── models/         # Database tables
-│   └── user.py
-├── services/       # Business logic
-│   └── user_service.py
-└── dependencies.py # Depends functions (get_db, get_current_user)
-"""

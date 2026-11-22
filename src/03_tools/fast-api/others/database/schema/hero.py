@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import field_validator
@@ -9,32 +10,19 @@ def utc_now():
     return datetime.now(UTC)
 
 
-class User(SQLModel, table=True):
-    __tablename__ = "users"
-
-    id: UUID = Field(default_factory=lambda: uuid4().hex, primary_key=True)
-    age: int = Field(gt=18, le=120)
-    first_name: str = Field(min_length=1, max_length=50)
-    last_name: str = Field(min_length=1, max_length=50)
-    address: str | None = Field(default=None, max_length=255)
-
-    # 🟡 Now by default when we try to fetch user it will automatically add heroes in the user
-    hero: list[Hero] = Relationship(back_populates="users")
-
-
 class Hero(SQLModel, table=True):
-    __tablename__ = "my_heroes"
+    __tablename__ = "heroes"
 
     secret_name: str
-    id: str = Field(default_factory=lambda: uuid4().hex, primary_key=True)
-    age: int | None = Field(default=None, index=True)
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    age: int | None = Field(default=None, ge=18, le=120)
     name: str = Field(index=True)  # 🟡 For making the current column as index
     user_id: UUID | None = Field(default=None, foreign_key="users.id")
 
     # 🟡 By Default it won't populate the joining data automatically and we don't need to manually use
     #    ".join()" method for joining the table
     # 🟡 By default when we try to fetch "Hero" SQLModel will automatically include the user
-    user: User | None = Relationship(back_populates="my_heroes")
+    user: Optional["User"] = Relationship(back_populates="heroes")
 
     # 🟡 Let's create fields that automatically filled like "createdAt" and "updatedAt"
     created_at: datetime = Field(
@@ -57,3 +45,19 @@ class Hero(SQLModel, table=True):
             raise ValueError("Name must be within 255 characters")
 
         return v.strip()
+
+
+class User(SQLModel, table=True):
+    __tablename__ = "users"
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    age: int = Field(ge=18, le=120)
+    first_name: str = Field(min_length=1, max_length=50)
+    last_name: str = Field(min_length=1, max_length=50)
+    address: str | None = Field(default=None, max_length=255)
+
+    # 🟡 Without """Relationship""" you join using ".join()" method that just gives you data as a pair
+    #    than you manually join them by hand.
+    # 🟡 Without """Relationship""" query User will automatically popular all the hero related to the
+    #    user automatically.
+    heroes: list[Hero] = Relationship(back_populates="user")

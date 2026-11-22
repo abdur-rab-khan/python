@@ -3,8 +3,6 @@ SQLITE      -->     sqlite:///relative/path/to/database.db
 POSTGRES    -->     postgresql://[user[:password]@][host][:port][/dbname][?param1=value1&...]
 """
 
-import json
-
 from sqlmodel import Session, SQLModel, col, create_engine, or_, select
 
 from .schema.hero import Hero, User  # noqa: I001
@@ -68,6 +66,22 @@ def create_db_and_tables():
         session.add(hero_7)
 
         session.commit()
+
+        session.refresh(hero_1)
+        session.refresh(hero_2)
+        session.refresh(hero_3)
+        session.refresh(hero_4)
+        session.refresh(hero_5)
+        session.refresh(hero_6)
+        session.refresh(hero_7)
+
+        print("Hero 1 is created: ", hero_1)
+        print("Hero 2 is created: ", hero_2)
+        print("Hero 3 is created: ", hero_3)
+        print("Hero 4 is created: ", hero_4)
+        print("Hero 5 is created: ", hero_5)
+        print("Hero 6 is created: ", hero_6)
+        print("Hero 7 is created: ", hero_7)
 
 
 # 👉 This is how we select data from the table
@@ -168,8 +182,17 @@ def connect_tables():
             end="\n\n",
         )
 
+
+# 🟡 Let's how """Relationship""" is working:
 def auto_connect():
-    pass
+    with Session(engine) as session:
+        hero = session.exec(select(Hero)).first()
+        print(
+            "Hero are: ",
+            hero.model_dump(include={"secret_name", "name", "age", "user"})
+            if hero
+            else None,
+        )
 
 
 if __name__ == "__main__":
@@ -179,3 +202,4 @@ if __name__ == "__main__":
     # update_date()
     # delete_data()
     # connect_tables()
+    auto_connect()
