@@ -184,14 +184,28 @@ def connect_tables():
 
 
 # 🟡 Let's how """Relationship""" is working:
+#       1. But with relationship, it does not directly connect two tables it just query the Hero and as
+#           we get "result.user" it calls another query for getting the "user"
+#
+# 🔵 Available Options to prevent (N + 1) query problem:
+#       1. "session.exec(select(Hero).options(selectinload(Hero.user))).all()" -> It just run two query
+#           --> SELECT * FROM heroes
+#           --> SELECT * FROM user WHERE users.id IN (id1, id2, id3, ...)
+#
+#       2. "session.exec(select(Hero).options(joinedload(Hero.user))).unique().all()" -> It just run one query
+#           --> SELECT * FROM heroes LEFT OUTER JOIN user ON users.id = hero.user_id
 def auto_connect():
     with Session(engine) as session:
-        hero = session.exec(select(Hero)).first()
+        hereos = session.exec(select(Hero))
         print(
             "Hero are: ",
-            hero.model_dump(include={"secret_name", "name", "age", "user"})
-            if hero
-            else None,
+            [
+                {
+                    **(hero.model_dump(include={"secret_name", "name", "age", "user"})),
+                    "user": hero.user.model_dump() if hero.user else None,
+                }
+                for hero in hereos
+            ],
         )
 
 
