@@ -33,8 +33,10 @@
 
 # namespace Problems
 
+
 def permutations(values):
     result, path, used = [], [], [False] * len(values)
+
     def backtrack():
         if len(path) == len(values):
             result.append(path[:])
@@ -47,5 +49,6 @@ def permutations(values):
             backtrack()
             path.pop()
             used[i] = False
+
     backtrack()
     return result

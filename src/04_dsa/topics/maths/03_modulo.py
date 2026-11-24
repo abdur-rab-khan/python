@@ -18,6 +18,7 @@
 
 # It will print the value of j until it is divisible by 5, and then it will stop.
 
+
 def remainder(number, divisor):
     if divisor == 0:
         raise ZeroDivisionError("modulo by zero")

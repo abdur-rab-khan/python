@@ -3,15 +3,13 @@ class Solution:
         sorted_children = sorted(g)
         sorted_cookies = sorted(s)
 
-        child_idx = 0
-        for cookie in sorted_cookies:
-            if child_idx == len(sorted_children):
-                break
+        g_ptr = s_ptr = 0
+        while g_ptr < len(sorted_children) and s_ptr < len(sorted_cookies):
+            if sorted_cookies[s_ptr] >= sorted_children[g_ptr]:
+                g_ptr += 1
+            s_ptr += 1
 
-            if cookie >= sorted_children[child_idx]:
-                child_idx += 1
-
-        return child_idx
+        return g_ptr
 
 
 if __name__ == "__main__":

@@ -517,6 +517,7 @@
 
 # namespace hard
 
+
 def two_sum_sorted(nums, target):
     left, right = 0, len(nums) - 1
     while left < right:
@@ -528,6 +529,7 @@ def two_sum_sorted(nums, target):
         else:
             right -= 1
     return []
+
 
 def reverse_array(nums):
     nums = nums[:]

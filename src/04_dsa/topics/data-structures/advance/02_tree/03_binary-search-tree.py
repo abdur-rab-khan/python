@@ -33,9 +33,11 @@
 
 # Case 2: One Children found
 
+
 class BSTNode:
     def __init__(self, value):
         self.value, self.left, self.right = value, None, None
+
 
 def bst_insert(root, value):
     if root is None:
@@ -45,6 +47,7 @@ def bst_insert(root, value):
     elif value > root.value:
         root.right = bst_insert(root.right, value)
     return root
+
 
 def bst_search(root, value):
     while root:

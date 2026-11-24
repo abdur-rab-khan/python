@@ -63,15 +63,20 @@
 
 import heapq
 
+
 class MinHeap:
     def __init__(self, values=()):
         self._heap = list(values)
         heapq.heapify(self._heap)
+
     def push(self, value):
         heapq.heappush(self._heap, value)
+
     def pop(self):
         return heapq.heappop(self._heap)
+
     def peek(self):
         return self._heap[0] if self._heap else None
+
     def __len__(self):
         return len(self._heap)

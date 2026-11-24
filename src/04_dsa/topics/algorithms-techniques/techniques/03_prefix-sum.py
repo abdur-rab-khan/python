@@ -52,12 +52,14 @@
 
 # Hard Prefix Sum Problems
 
+
 def prefix_sum(nums):
     result, running = [], 0
     for value in nums:
         running += value
         result.append(running)
     return result
+
 
 def range_sum(prefix, left, right):
     return prefix[right] - (prefix[left - 1] if left else 0)

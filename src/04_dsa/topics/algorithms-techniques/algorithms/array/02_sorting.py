@@ -149,6 +149,7 @@
 
 # mergeSort::main();
 
+
 def bubble_sort(values):
     arr = values[:]
     for i in range(len(arr)):
@@ -156,6 +157,7 @@ def bubble_sort(values):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
     return arr
+
 
 def selection_sort(values):
     arr = values[:]
@@ -166,6 +168,7 @@ def selection_sort(values):
                 smallest = j
         arr[i], arr[smallest] = arr[smallest], arr[i]
     return arr
+
 
 def insertion_sort(values):
     arr = values[:]

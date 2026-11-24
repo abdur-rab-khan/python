@@ -5,7 +5,7 @@
 |                                                                                                                                                   |
 | 🟡 BIG O notation tells about how algorithms "execution time" or "operation grow" when size "n" increases.                                        |
 |                                                                                                                                                   |
-| 🔶 BIG O Examples:                                                                                                                                | 
+| 🔶 BIG O Examples:                                                                                                                                |
 |                                                                                                                                                   |
 |    1. O(1): It will take constant time not depends on how much input size it.                                                                     |
 |                                                                                                                                                   |
@@ -40,8 +40,10 @@
 +---------------------------------------------------------------------------------------------------------------------------------------------------+
 """
 
+
 def constant_time_example(values):
     return values[0] if values else None
+
 
 def linear_time_example(values):
     total = 0

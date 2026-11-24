@@ -19,6 +19,7 @@
 
 # Optimized solution
 
+
 def power(base, exponent):
     if exponent < 0:
         return 1 / power(base, -exponent)

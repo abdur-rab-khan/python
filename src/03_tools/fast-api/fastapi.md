@@ -50,12 +50,14 @@ app.include_router(products_router, prefix="/products", tags=["Products"])
 ```py
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     database_url: str
     secret_key: str
 
     class Config:
         env_file = ".env"
+
 
 settings = Settings()
 ```
@@ -74,6 +76,7 @@ engine = create_engine(settings.database_url)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -89,6 +92,7 @@ def get_db():
 ```py
 from sqlalchemy import Column, Integer, String
 from app.db.session import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -106,9 +110,11 @@ class User(Base):
 ```py
 from pydantic import BaseModel, EmailStr
 
+
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+
 
 class UserResponse(BaseModel):
     id: int
@@ -125,6 +131,7 @@ class UserResponse(BaseModel):
 ```py
 from sqlalchemy.orm import Session
 from app.users.models import User
+
 
 class UserRepository:
     def __init__(self, db: Session):
@@ -150,6 +157,7 @@ from sqlalchemy.orm import Session
 from app.users.models import User
 from app.users.schemas import UserCreate
 
+
 # Without using any repository
 def create_user(db: Session, data: UserCreate):
     user = User(email=data.email, password=data.password)
@@ -157,6 +165,7 @@ def create_user(db: Session, data: UserCreate):
     db.commit()
     db.refresh(user)
     return user
+
 
 # With using repository
 class UserService:
@@ -181,6 +190,7 @@ from app.db.session import get_db
 from app.users.repository import UserRepository
 from app.users.service import UserService
 
+
 def get_user_service(db: Session = Depends(get_db)):
     return UserService(UserRepository(db))
 ```
@@ -199,10 +209,12 @@ from app.users.schemas import UserCreate, UserResponse
 
 router = APIRouter()
 
+
 # Without using any repository
 @router.post("/", response_model=UserResponse)
 def create_user(data: UserCreate, db: Session = Depends(get_db)):
     return service.create_user(db, data)
+
 
 # With using repository
 @router.post("/", response_model=UserResponse)
