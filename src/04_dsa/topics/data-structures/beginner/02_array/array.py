@@ -22,10 +22,12 @@
 
 # Count element frequency
 
+
 def traverse(values):
     for value in values:
         print(value, end=" ")
     print()
+
 
 def reverse_array(values):
     values = values[:]
@@ -36,10 +38,12 @@ def reverse_array(values):
         right -= 1
     return values
 
+
 def find_min_max(values):
     if not values:
         return None, None
     return min(values), max(values)
+
 
 def count_frequency(values):
     frequency = {}

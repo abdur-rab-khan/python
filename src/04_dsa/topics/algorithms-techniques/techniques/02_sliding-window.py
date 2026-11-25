@@ -487,6 +487,7 @@
 
 # Calling main functions
 
+
 def max_sum_fixed_window(nums, k):
     if k <= 0 or k > len(nums):
         return None
@@ -496,6 +497,7 @@ def max_sum_fixed_window(nums, k):
         window += nums[right] - nums[right - k]
         best = max(best, window)
     return best
+
 
 def longest_unique_substring(text):
     seen = {}

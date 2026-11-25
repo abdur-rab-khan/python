@@ -19,19 +19,23 @@
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 """
 
+
 class TreeNode:
     def __init__(self, value, left=None, right=None):
         self.value, self.left, self.right = value, left, right
+
 
 def preorder(root):
     if root is None:
         return []
     return [root.value] + preorder(root.left) + preorder(root.right)
 
+
 def inorder(root):
     if root is None:
         return []
     return inorder(root.left) + [root.value] + inorder(root.right)
+
 
 def postorder(root):
     if root is None:

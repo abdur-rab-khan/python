@@ -70,13 +70,13 @@
 
 # 🟡 Different types of Stacks
 
-""" 2️⃣. Monotonic Stack
-        * In normal stack, there is no rule while pushing the element into the stack, but in monotonic stack there is a rule for pushing onto the stack.
+"""2️⃣. Monotonic Stack
+* In normal stack, there is no rule while pushing the element into the stack, but in monotonic stack there is a rule for pushing onto the stack.
 
-        * 🟡 Types of Monotonic Stack
-            * 1️⃣. Increasing Stack: In this case, If current element is greater than elements inside stack then we'll remove every elements smaller than current one, but if current element is smaller we push like in normal stack.
-            * 2️⃣. Decreasing Stack: In this case, If current element is smaller than elements inside stack than we'll remove every elements greater than current one, but if current element is greater than we push like in normal stack.
- """
+* 🟡 Types of Monotonic Stack
+    * 1️⃣. Increasing Stack: In this case, If current element is greater than elements inside stack then we'll remove every elements smaller than current one, but if current element is smaller we push like in normal stack.
+    * 2️⃣. Decreasing Stack: In this case, If current element is smaller than elements inside stack than we'll remove every elements greater than current one, but if current element is greater than we push like in normal stack.
+"""
 
 # Remove smaller from top
 
@@ -102,20 +102,26 @@
 
 # StackDS::main();
 
+
 class Stack:
     def __init__(self):
         self._items = []
+
     def push(self, value):
         self._items.append(value)
+
     def pop(self):
         if self.is_empty():
             raise IndexError("pop from empty stack")
         return self._items.pop()
+
     def peek(self):
         if self.is_empty():
             raise IndexError("peek from empty stack")
         return self._items[-1]
+
     def is_empty(self):
         return not self._items
+
     def size(self):
         return len(self._items)

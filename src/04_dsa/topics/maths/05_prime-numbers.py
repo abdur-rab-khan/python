@@ -22,6 +22,7 @@
 
 # If it's divisible by any number it can't be a prime
 
+
 def is_prime(number):
     if number < 2:
         return False
@@ -32,12 +33,13 @@ def is_prime(number):
         divisor += 1
     return True
 
+
 def sieve(limit):
     if limit < 2:
         return []
     prime = [True] * (limit + 1)
     prime[0] = prime[1] = False
-    for value in range(2, int(limit ** 0.5) + 1):
+    for value in range(2, int(limit**0.5) + 1):
         if prime[value]:
             for multiple in range(value * value, limit + 1, value):
                 prime[multiple] = False

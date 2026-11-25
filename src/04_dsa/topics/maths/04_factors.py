@@ -44,11 +44,12 @@
 
 # Calling factor
 
+
 def factors(number):
     if number <= 0:
         return []
     result = []
-    for value in range(1, int(number ** 0.5) + 1):
+    for value in range(1, int(number**0.5) + 1):
         if number % value == 0:
             result.append(value)
             if value != number // value:

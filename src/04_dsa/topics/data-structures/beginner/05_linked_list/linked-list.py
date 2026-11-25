@@ -1,25 +1,25 @@
 """
- * 🟡 A linked list is a data structure that are form using chain of nodes, these nodes are nothing but an "object" which hold some kind of information. Unlike array data structure that where data is stored into contiguous memory location.
-   🟡 In linked list each node have the ""reference of a memory block"" represents the next node. Means these nodes are scattered in memory but connected with there ""reference pointer"".
+* 🟡 A linked list is a data structure that are form using chain of nodes, these nodes are nothing but an "object" which hold some kind of information. Unlike array data structure that where data is stored into contiguous memory location.
+  🟡 In linked list each node have the ""reference of a memory block"" represents the next node. Means these nodes are scattered in memory but connected with there ""reference pointer"".
 
-   🔶 Information stored by node:
-        1. "Actual Data"
-        2. "Reference Pointer to next node"
-        3. "Reference Pointer to previous node (Doubly Linked List)"
+  🔶 Information stored by node:
+       1. "Actual Data"
+       2. "Reference Pointer to next node"
+       3. "Reference Pointer to previous node (Doubly Linked List)"
 
-   🔷 Types of Linked List:
-        1. "Singly Linked List"
-        2. "Doubly Linked List"
-        3. "Circular Linked List"
+  🔷 Types of Linked List:
+       1. "Singly Linked List"
+       2. "Doubly Linked List"
+       3. "Circular Linked List"
 
-   🔶 Key Terminologies
-        1. "Node"
-        2. "Head"
-        3. "Tail"
-        4. "Pointer / Next"
-        5. "Prev"
-        6. "Traversal"
-        7. "nullptr / NULL"
+  🔶 Key Terminologies
+       1. "Node"
+       2. "Head"
+       3. "Tail"
+       4. "Pointer / Next"
+       5. "Prev"
+       6. "Traversal"
+       7. "nullptr / NULL"
 """
 
 """
@@ -64,13 +64,16 @@
 
 # namespace LinkedListTypes
 
+
 class Node:
     def __init__(self, value):
         self.value, self.next = value, None
 
+
 class SinglyLinkedList:
     def __init__(self):
         self.head = None
+
     def append(self, value):
         node = Node(value)
         if self.head is None:
@@ -80,6 +83,7 @@ class SinglyLinkedList:
         while current.next:
             current = current.next
         current.next = node
+
     def traverse(self):
         values, current = [], self.head
         while current:

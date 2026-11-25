@@ -1,4 +1,7 @@
 # : schema https://json.schemastore.org/pyproject.json
+
+# 👉 It's equivalent to "package.json" file where we have all common
+#    project configurations
 [project]
 name = "python"
 version = "0.1.0"
@@ -18,15 +21,36 @@ dependencies = [
     "sqlmodel>=0.0.48",
 ]
 
+[project.scripts]
+# lint = "ruff check" ❌ Here we can't run library/package run just script
+# Let's break down this:
+#   1. "python.main" -> "python/main.py"
+#   2. ":main"       -> "it's the function name inside main.py file"
+# * Similar to "python -m python.main"
+start = "src.main:main"
+
 [dependency-groups]
-dev = ["pyright>=1.1.414", "ruff>=0.17.0", "ty>=0.0.84"]
+dev = ["poethepoet>=0.49.0", "pyright>=1.1.414", "ruff>=0.17.0", "ty>=0.0.84"]
 
-# 👉 This repo is a set of learning scripts, not an installable package.
-#    "package = false" tells uv to only manage the virtual environment and
-#    never run a build step, so no build-backend / module-name is needed.
-[tool.uv]
-package = false
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
 
-# 👉 This is how we set the entrypoint to tell the fastapi for the entrypoint of the application
 # [tool.fastapi]
 # entrypoint = "src.03_tools.fast-api.main:app"
+
+[tool.uv.build-backend]
+module-name = "src"
+module-root = ""
+
+# 🔶 Python can't directly run cli command following are cli commands not a script, to a script we have to
+#    use poe
+[tool.poe.tasks]
+lint = "ruff check"
+format = "ruff format"
+typecheck = "pyright"
+
+# 🔶 We can directly make sequence of task that run on after another to
+#     invoke this we just need to run this command --> "uv run poe check"
+[tool.poe.tasks.check]
+sequence = ["lint", "typecheck", "format"]

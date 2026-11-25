@@ -444,11 +444,13 @@
 
 # Problems
 
+
 def linear_search(values, target):
     for i, value in enumerate(values):
         if value == target:
             return i
     return -1
+
 
 def binary_search(values, target):
     left, right = 0, len(values) - 1
