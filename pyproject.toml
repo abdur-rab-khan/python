@@ -1,0 +1,56 @@
+# : schema https://json.schemastore.org/pyproject.json
+
+# 👉 It's equivalent to "package.json" file where we have all common
+#    project configurations
+[project]
+name = "python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+authors = [{ name = "Abdur Rab Khan", email = "abdurrabkhan3263@gmail.com" }]
+dependencies = [
+    "alembic>=1.20.1",
+    "bcrypt>=5.0.0",
+    "fastapi[standard]>=0.143.3",
+    "httpx[cli]>=0.28.1",
+    "psycopg2-binary>=2.9.13",
+    "psycopg[binary]>=3.3.9",
+    "pydantic>=2.14.0",
+    "pydantic-settings>=2.15.0",
+    "sqlmodel>=0.0.48",
+]
+
+[project.scripts]
+# lint = "ruff check" ❌ Here we can't run library/package run just script
+# Let's break down this:
+#   1. "python.main" -> "python/main.py"
+#   2. ":main"       -> "it's the function name inside main.py file"
+# * Similar to "python -m python.main"
+start = "src.main:main"
+
+[dependency-groups]
+dev = ["poethepoet>=0.49.0", "pyright>=1.1.414", "ruff>=0.17.0", "ty>=0.0.84"]
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
+
+# [tool.fastapi]
+# entrypoint = "src.03_tools.fast-api.main:app"
+
+[tool.uv.build-backend]
+module-name = "src"
+module-root = ""
+
+# 🔶 Python can't directly run cli command following are cli commands not a script, to a script we have to
+#    use poe
+[tool.poe.tasks]
+lint = "ruff check"
+format = "ruff format"
+typecheck = "pyright"
+
+# 🔶 We can directly make sequence of task that run on after another to
+#     invoke this we just need to run this command --> "uv run poe check"
+[tool.poe.tasks.check]
+sequence = ["lint", "typecheck", "format"]

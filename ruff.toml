@@ -1,0 +1,7 @@
+#:schema https://json.schemastore.org/ruff.json
+
+[lint]
+ignore = ["E501"]
+
+[format]
+quote-style = "double"
